@@ -47,6 +47,7 @@ export function buildInitScript(options?: {
           defaultModel: "claude-sonnet-4-20250514",
           configured: true,
           providerType: "Preferred",
+          category: "model",
           configKeys: [],
           setupSteps: [],
           supportsRefresh: true,
@@ -72,6 +73,7 @@ export function buildInitScript(options?: {
           defaultModel: "gpt-4.1",
           configured: true,
           providerType: "Preferred",
+          category: "model",
           configKeys: [],
           setupSteps: [],
           supportsRefresh: true,
@@ -89,6 +91,48 @@ export function buildInitScript(options?: {
               recommended: true,
             },
           ],
+        },
+      ];
+      const PROVIDER_SETUP_CATALOG = [
+        {
+          providerId: "claude",
+          name: "Claude",
+          category: "model",
+          description: "Claude provider",
+          setupMethod: "single_api_key",
+          fields: [
+            {
+              key: "ANTHROPIC_API_KEY",
+              label: "API key",
+              secret: true,
+              required: true,
+            },
+          ],
+          group: "default",
+          showOnlyWhenInstalled: false,
+          supportsInstall: false,
+          supportsAuth: false,
+          supportsAuthStatus: false,
+        },
+        {
+          providerId: "openai",
+          name: "OpenAI",
+          category: "model",
+          description: "OpenAI provider",
+          setupMethod: "single_api_key",
+          fields: [
+            {
+              key: "OPENAI_API_KEY",
+              label: "API key",
+              secret: true,
+              required: true,
+            },
+          ],
+          group: "default",
+          showOnlyWhenInstalled: false,
+          supportsInstall: false,
+          supportsAuth: false,
+          supportsAuthStatus: false,
         },
       ];
 
@@ -203,6 +247,8 @@ export function buildInitScript(options?: {
           }
           case "_goose/providers/list":
             return jsonRpcResult(message.id, { entries: PROVIDER_INVENTORY });
+          case "_goose/providers/setup/catalog/list":
+            return jsonRpcResult(message.id, { providers: PROVIDER_SETUP_CATALOG });
           case "_goose/providers/inventory/refresh":
             return jsonRpcResult(message.id, { started: [], skipped: [] });
           case "_goose/defaults/read":
